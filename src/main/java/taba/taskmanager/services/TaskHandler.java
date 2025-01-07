@@ -14,28 +14,16 @@ import java.util.List;
 public class TaskHandler
 {
     private List<Task> tasks = new ArrayList<>();
+    private String projectId;
     
-    public TaskHandler()
-    {}
-    
-    public TaskHandler(boolean addTestValue)
+    public TaskHandler(String projectId)
     {
-        if (addTestValue)
-        {
-            test();
-        }
-    }
-    
-    public void test()
-    {
-        addTask("1", "test", "test");
-        addTask("2", "test", "test");
-        addTask("3", "test", "test");
+        this.projectId = projectId;
     }
     
     public void addTask(String id, String name, String description)
     {
-        Task newTask = new Task(id, name, description);
+        Task newTask = new Task(id, name, description, projectId);
         
         if (!handleDuplicates(newTask))
         {
@@ -64,6 +52,61 @@ public class TaskHandler
         }
         
         return false;
+    }
+    
+    public boolean removeTask(String id)
+    {
+        for (Task task : tasks)
+        {
+            if (task.getId().equals(id))
+            {
+                tasks.remove(task);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean updateName(String id, String newName)
+    {
+        for (Task task : tasks)
+        {
+            if (task.getId().equals(id))
+            {
+                task.setName(newName);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public boolean updateDescription(String id, String newDescription)
+    {
+        for (Task task : tasks)
+        {
+            if (task.getId().equals(id))
+            {
+                task.setDescription(newDescription);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public Task getTask(String id)
+    {
+        for (Task task : tasks)
+        {
+            if (task.getId().equals(id))
+            {
+                return task;
+            }
+        }
+        
+        return null;
     }
     
     public List<Task> getAllTasks()

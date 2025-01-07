@@ -10,6 +10,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
+import taba.taskmanager.services.ProjectHandler;
+import taba.taskmanager.models.Project;
 import taba.taskmanager.services.TaskHandler;
 import taba.taskmanager.models.Task;
 import java.util.List;
@@ -22,15 +24,23 @@ import java.util.List;
 @Path("taskBoard")
 public class TaskBoardResource
 {
-    TaskHandler th = new TaskHandler(true);
+    ProjectHandler pHandler = new ProjectHandler(true);
     
     @GET
     @Path("/xml")
     @Produces(MediaType.APPLICATION_XML)
-    public List<Task> getXml()
+    public List<Project> getXml()
     {
-        return th.getAllTasks();
+        return pHandler.getAllProjects();
     }
+    
+//    @GET
+//    @Path("/json")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<Project> getJson()
+//    {
+//        return pHandler.getAllProjects();
+//    }
 
     /**
      * PUT method for updating or creating an instance of TaskBoardResource

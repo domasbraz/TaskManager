@@ -14,15 +14,15 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 
 @XmlRootElement
-@XmlType(propOrder = {"id", "name", "description", "status", "dateStart", "dateFinished"})
+@XmlType(propOrder = {"id", "name", "description", "status", "dateStart", "dateFinished", "projectId"})
 public class Task
 {
-    private String id, name, description, status, dateStart, dateFinished;
+    private String id, name, description, status, dateStart, dateFinished, projectId;
     
     public Task()
     {}
     
-    public Task(String id, String name, String description)
+    public Task(String id, String name, String description, String projectId)
     {
         this.id = id;
         this.name = name;
@@ -30,6 +30,7 @@ public class Task
         status = "pending";
         dateStart = LocalDate.now().toString();
         dateFinished = "n/a";
+        this.projectId = projectId;
     }
     
     public void setId(String id)
@@ -60,6 +61,11 @@ public class Task
     public void setDateFinished(String dateFinished)
     {
         this.dateFinished = dateFinished;
+    }
+
+    public void setProjectId(String projectId)
+    {
+        this.projectId = projectId;
     }
     
     
@@ -99,4 +105,11 @@ public class Task
     {
         return dateFinished;
     }
+
+    public String getProjectId()
+    {
+        return projectId;
+    }
+    
+    
 }
