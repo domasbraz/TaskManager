@@ -4,6 +4,7 @@
  */
 package taba.taskmanager.models;
 
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
 import java.time.LocalDate;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
@@ -15,6 +16,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlRootElement
 @XmlType(propOrder = {"id", "name", "description", "status", "dateStart", "dateFinished", "projectId"})
+@JsonbPropertyOrder({"id", "name", "description", "status", "dateStart", "dateFinished", "projectId"})
 public class Task
 {
     private String id, name, description, status, dateStart, dateFinished, projectId;

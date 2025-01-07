@@ -4,6 +4,8 @@
  */
 package taba.taskmanager.models;
 
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
+import jakarta.json.bind.annotation.JsonbTransient;
 import taba.taskmanager.models.Task;
 import taba.taskmanager.services.TaskHandler;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
@@ -18,6 +20,7 @@ import java.util.List;
  */
 @XmlRootElement
 @XmlType(propOrder = {"id", "name", "description", "tasks"})
+@JsonbPropertyOrder({"id", "name", "description", "tasks"})
 public class Project
 {
     private String id, name, description;
@@ -71,6 +74,7 @@ public class Project
         return tHandler.getAllTasks();
     }
 
+    @JsonbTransient
     public TaskHandler getHandler()
     {
         return tHandler;

@@ -6,10 +6,12 @@ package taba.taskmanager.resources;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import taba.taskmanager.services.ProjectHandler;
 import taba.taskmanager.models.Project;
 import taba.taskmanager.services.TaskHandler;
@@ -24,15 +26,22 @@ import java.util.List;
 @Path("taskBoard")
 public class TaskBoardResource
 {
+    private String apiKey = "14c2529eb4498c5d1ffd6915d05bf58a91bdda796af59f41d480d11c099d0479";
     ProjectHandler pHandler = new ProjectHandler(true);
     
     @GET
-    @Path("/xml")
-    @Produces(MediaType.APPLICATION_XML)
-    public List<Project> getXml()
+    @Path("/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getJson(@HeaderParam("key") String key)
     {
-        return pHandler.getAllProjects();
+        if (apiKey.equals(key))
+        {
+            List<Project> projects = pHandler.getAllProjects();
+            return Response.ok(projects).build();
+        }
+        return Response.status(Response.Status.FORBIDDEN).build();
     }
+    
     
 //    @GET
 //    @Path("/json")

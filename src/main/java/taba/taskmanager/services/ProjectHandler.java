@@ -4,6 +4,7 @@
  */
 package taba.taskmanager.services;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
 import taba.taskmanager.models.Project;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  *
  * @author domas
  */
+@XmlRootElement
 public class ProjectHandler
 {
     private List<Project> projects = new ArrayList<Project>();
@@ -30,7 +32,6 @@ public class ProjectHandler
     private void test()
     {
         addProject("p1", "project 1", "test");
-        addProject("p2", "project 2", "test");
         
         Project p1 = getProject("p1");
         taba.taskmanager.services.TaskHandler th = p1.getHandler();
