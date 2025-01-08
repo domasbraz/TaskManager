@@ -28,7 +28,7 @@ public class Project
     
     public Project()
     {}
-    
+     
     public Project(String id, String name, String description)
     {
         this.id = id;
@@ -50,6 +50,11 @@ public class Project
     public void setDescription(String description)
     {
         this.description = description;
+    }
+    
+    public void resetTaskHandler()
+    {
+        tHandler = new TaskHandler(id);
     }
 
     public String getId()

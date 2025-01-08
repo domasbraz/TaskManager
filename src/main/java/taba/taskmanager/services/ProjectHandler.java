@@ -8,6 +8,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import taba.taskmanager.models.Project;
 import java.util.ArrayList;
 import java.util.List;
+import taba.taskmanager.models.Task;
 
 /**
  *
@@ -16,7 +17,7 @@ import java.util.List;
 @XmlRootElement
 public class ProjectHandler
 {
-    private List<Project> projects = new ArrayList<Project>();
+    private ArrayList<Project> projects = new ArrayList<Project>();
     
     public ProjectHandler()
     {}
@@ -32,6 +33,7 @@ public class ProjectHandler
     private void test()
     {
         addProject("p1", "project 1", "test");
+        addProject("p2", "project 2", "test");
         
         Project p1 = getProject("p1");
         taba.taskmanager.services.TaskHandler th = p1.getHandler();
@@ -39,8 +41,10 @@ public class ProjectHandler
         th.addTask("t1", "task 1", "another test");
         th.addTask("t2", "task 2", "another test");
         th.addTask("t3", "task 3", "another test");
+        
+        System.out.println("being called");
     }
-    public void addProject(String id, String name, String description)
+    private void addProject(String id, String name, String description)
     {
         Project newProject = new Project(id, name, description);
         
@@ -48,6 +52,14 @@ public class ProjectHandler
         {
             projects.add(newProject);
         }
+    }
+    
+    public void newProject(Project project)
+    {
+        final String id = project.getId();
+        final String name = project.getName();
+        final String description = project.getDescription();
+        addProject(id, name, description);
     }
     
     private boolean handleDuplicates(Project newProject)
@@ -127,5 +139,20 @@ public class ProjectHandler
     public List<Project> getAllProjects()
     {
         return projects;
+    }
+    
+    public List<Task> getAllTasks()
+    {
+        List<Task> allTasks = new ArrayList<>();
+        for (Project project : projects)
+        {
+            TaskHandler th = project.getHandler();
+            
+            List<Task> tasks = th.getAllTasks();
+            
+            allTasks.addAll(tasks);
+        }
+        
+        return allTasks;
     }
 }
