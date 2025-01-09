@@ -31,6 +31,7 @@ public class TaskHandler
         }
     }
     
+    //returns true if a duplicate is found and replaced, false if no duplicate is found
     private boolean handleDuplicates(Task newTask)
     {
         if (tasks.size() < 1)

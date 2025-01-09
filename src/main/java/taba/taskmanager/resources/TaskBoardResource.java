@@ -28,11 +28,16 @@ import java.util.List;
 @Path("taskBoard")
 public class TaskBoardResource
 {
+    //enter this value within a custom header called "key"
     private String apiKey = "14c2529eb4498c5d1ffd6915d05bf58a91bdda796af59f41d480d11c099d0479";
     //this variable needs to be static because each time a request is sent, a new instance of this class is being made
     //static ensures that this object is synchronised with all instances of this class (all instances use the same object)
     private static ProjectHandler pHandler = new ProjectHandler(true);
     
+    //Response data type is used to ensure server responds according to different situations (404, 403, etc.)
+    //Response build() seems to be unable to convert List types to xml by default hence all data is returned as JSON
+    
+    //gets all projects
     @GET
     @Path("/json")
     @Produces(MediaType.APPLICATION_JSON)
@@ -46,6 +51,7 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
     
+    //gets all tasks
     @GET
     @Path("/json/tasks")
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,6 +64,33 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
     
+    //gets all pending tasks
+    @GET
+    @Path("/json/tasks/pending")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTasksByPendingStatus(@HeaderParam("key") String key)
+    {
+        if (apiKey.equals(key))
+        {
+            return Response.ok(pHandler.getTaskByStatus("pending")).build();
+        }
+        return Response.status(Response.Status.FORBIDDEN).build();
+    }
+    
+    //gets all completed tasks
+    @GET
+    @Path("/json/tasks/completed")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTasksByCompletedStatus(@HeaderParam("key") String key)
+    {
+        if (apiKey.equals(key))
+        {
+            return Response.ok(pHandler.getTaskByStatus("completed")).build();
+        }
+        return Response.status(Response.Status.FORBIDDEN).build();
+    }
+    
+    //gets project by Id
     @GET
     @Path("/json/{projectId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -75,6 +108,26 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
     
+    //gets tasks by project id
+    @GET
+    @Path("/json/{projectId}/tasks")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProjectTasks(@HeaderParam("key") String key, @PathParam("projectId") String id)
+    {
+        if (apiKey.equals(key))
+        {
+            Project project;
+            if ((project = pHandler.getProject(id)) != null)
+            {
+                TaskHandler taskHandler = project.getHandler();
+                return Response.ok(taskHandler.getAllTasks()).build();
+            }
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.status(Response.Status.FORBIDDEN).build();
+    }
+    
+    //gets task by project id and task id
     @GET
     @Path("/json/{projectId}/{taskId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -96,6 +149,7 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
     
+    //creates new project
     @PUT
     @Path("/json")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -110,6 +164,7 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
     
+    //updates project name
     @PUT
     @Path("/json/{projectId}/name")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -129,6 +184,7 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
     
+    //updates project description
     @PUT
     @Path("/json/{projectId}/description")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -148,6 +204,7 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
     
+    //creates task
     @PUT
     @Path("/json/{projectId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -173,6 +230,7 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
 
+    //updates task name
     @PUT
     @Path("/json/{projectId}/{taskId}/name")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -195,6 +253,7 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
     
+    //updates task description
     @PUT
     @Path("/json/{projectId}/{taskId}/description")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -217,6 +276,7 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
     
+    //sets task status to completed
     @PUT
     @Path("/json/{projectId}/{taskId}/complete")
     @Produces(MediaType.APPLICATION_JSON)
@@ -244,6 +304,7 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
     
+    //deletes project
     @DELETE
     @Path("/json/{projectId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -260,6 +321,7 @@ public class TaskBoardResource
         return Response.status(Response.Status.FORBIDDEN).build();
     }
     
+    //deletes task
     @DELETE
     @Path("/json/{projectId}/{taskId}")
     @Produces(MediaType.APPLICATION_JSON)

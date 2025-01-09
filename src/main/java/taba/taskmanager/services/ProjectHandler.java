@@ -30,6 +30,7 @@ public class ProjectHandler
         }
     }
     
+    //adds some projects for testing so that server is not empty
     private void test()
     {
         addProject("p1", "project 1", "test");
@@ -44,6 +45,7 @@ public class ProjectHandler
         
         System.out.println("being called");
     }
+    
     private void addProject(String id, String name, String description)
     {
         Project newProject = new Project(id, name, description);
@@ -56,12 +58,15 @@ public class ProjectHandler
     
     public void newProject(Project project)
     {
+        //used constants to prevent data from being stored as a reference
+        //this is mostly a failsafe measure
         final String id = project.getId();
         final String name = project.getName();
         final String description = project.getDescription();
         addProject(id, name, description);
     }
     
+    //returns true if a duplicate is found and replaced, false if no duplicate is found
     private boolean handleDuplicates(Project newProject)
     {
         if (projects.size() < 1)
@@ -85,6 +90,7 @@ public class ProjectHandler
         return false;
     }
     
+    //get project by id
     private Project search(String id)
     {
         for (Project project : projects)
@@ -154,5 +160,24 @@ public class ProjectHandler
         }
         
         return allTasks;
+    }
+    
+    public List<Task> getTaskByStatus(String status)
+    {
+        List<Task> allTasks = getAllTasks();
+        
+        List<Task> newTasks = new ArrayList<>();
+        
+        for (Task task : allTasks)
+        {
+            String taskStatus = task.getStatus();
+            
+            if (taskStatus.equalsIgnoreCase(status))
+            {
+                newTasks.add(task);
+            }
+        }
+        
+        return newTasks;
     }
 }

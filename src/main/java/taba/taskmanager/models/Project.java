@@ -51,11 +51,6 @@ public class Project
     {
         this.description = description;
     }
-    
-    public void resetTaskHandler()
-    {
-        tHandler = new TaskHandler(id);
-    }
 
     public String getId()
     {
